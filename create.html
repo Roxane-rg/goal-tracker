@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un objectif</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fff;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: auto;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
+
+    .luxury {
+      font-weight: 300;
+    }
+
+    .julie {
+      font-family: 'Great Vibes', cursive;
+      color: #e91e63;
+      font-size: 2em;
+    }
+
+    .step {
+      display: none;
+      animation: fadeIn 0.5s ease-in-out;
+      text-align: center;
+    }
+
+    .step.active {
+      display: block;
+    }
+
+    .question {
+      font-size: 1.3em;
+      margin-bottom: 20px;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 30px;
+    }
+
+    .option-btn, .btn {
+      padding: 12px;
+      border: 2px solid #e91e63;
+      border-radius: 10px;
+      background-color: white;
+      color: #e91e63;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: fit-content;
+      min-width: 240px;
+    }
+
+    .option-btn:hover, .btn:hover {
+      background-color: #e91e63;
+      color: white;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 30px;
+    }
+
+    .checkbox-group label {
+      font-weight: 500;
+      color: #e91e63;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      accent-color: #e91e63;
+      width: 18px;
+      height: 18px;
+    }
+
+    form#customGoalForm {
+      margin-top: 40px;
+      text-align: center;
+      background-color: #fdf5f8;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    input, select {
+      padding: 12px;
+      margin: 10px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 1em;
+      width: calc(100% - 40px);
+      max-width: 500px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 30px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    th, td {
+      background-color: #fff0f5;
+      border: none;
+      padding: 15px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    th {
+      background-color: #f3e5f5;
+      color: #e91e63;
+      font-weight: 600;
+    }
+
+    .delete-btn {
+      background-color: transparent;
+      border: none;
+      color: #e91e63;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      text-decoration: underline;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+
+ <script>
+  document.getElementById('goToCreateBtn').addEventListener('click', function() {
+    window.location.href = 'suivi.html'; // adapte selon le nom réel de ta page création
+  });
+</script>
+
+</head>
+<body>
+  <div class="container">
+    <h1><span class="luxury">Créer une</span> <span class="Roxane">habitude</span></h1>
+
+    <form id="habitForm">
+
+      <!-- Étapes 1 à 4 -->
+      <div class="step active" id="step1">
+        <div class="question">À quelle fréquence souhaites-tu créer un objectif ?</div>
+        <div class="options">
+          <button type="button" class="option-btn" onclick="nextStep(1)">Tous les jours</button>
+          <button type="button" class="option-btn" onclick="nextStep(1)">Plusieurs fois par semaine</button>
+          <button type="button" class="option-btn" onclick="nextStep(1)">Chaque semaine</button>
+          <button type="button" class="option-btn" onclick="nextStep(1)">Chaque mois</button>
+        </div>
+      </div>
+
+      <div class="step" id="step2">
+        <div class="question">À quelle fréquence souhaites-tu suivre l'évolution de cet objectif ?</div>
+        <div class="options">
+          <button type="button" class="option-btn" onclick="nextStep(2)">Tous les jours</button>
+          <button type="button" class="option-btn" onclick="nextStep(2)">Plusieurs fois par semaine</button>
+          <button type="button" class="option-btn" onclick="nextStep(2)">Chaque semaine</button>
+          <button type="button" class="option-btn" onclick="nextStep(2)">Chaque mois</button>
+        </div>
+      </div>
+
+      <div class="step" id="step3">
+        <div class="question">Est-ce nouveau pour toi de suivre une routine ?</div>
+        <div class="options">
+          <button type="button" class="option-btn" onclick="nextStep(3)">Oui</button>
+          <button type="button" class="option-btn" onclick="nextStep(3)">Non</button>
+        </div>
+      </div>
+
+      <div class="step" id="step4">
+        <div class="question">Quel est l'objectif de créer tes habitudes ?</div>
+        <div class="checkbox-group">
+          <label><input type="checkbox" name="goals" value="Productivité"> Productivité</label>
+          <label><input type="checkbox" name="goals" value="Assiduité"> Assiduité</label>
+          <label><input type="checkbox" name="goals" value="Suivre à objectifs"> Suivre à objectifs</label>
+          <label><input type="checkbox" name="goals" value="Nouvelle prise en main"> Nouvelle prise en main</label>
+          <label><input type="checkbox" name="goals" value="Suivi des habitudes"> Suivi des habitudes</label>
+        </div>
+        <button type="button" class="btn" onclick="showCustomForm()">Valider</button>
+      </div>
+    </form>
+
+
+   <div style="text-align:center; margin-top: 30px;">
+  <button onclick="window.location.href='suivi.html'" style="
+    background-color: #e91e63; 
+    color: white; 
+    border: none; 
+    padding: 12px 25px; 
+    border-radius: 25px; 
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Montserrat', sans-serif;
+    box-shadow: 0 4px 12px rgba(233,30,99,0.4);
+    transition: background-color 0.3s ease;
+  ">
+    Voir mon suivi
+  </button>
+</div>
+
+
+<script>
+  document.getElementById('goToSuiviBtn').addEventListener('click', function() {
+    window.location.href = 'suivi.html'; // adapte selon le nom réel de ta page création
+  });
+</script>
+
+
+
+    <form id="customGoalForm" style="display:none;">
+      <h2>Ajoute ton propre objectif</h2>
+      <input type="text" id="customName" placeholder="Nom de l'objectif" required>
+      <select id="customFrequency">
+        <option value="Tous les jours">Tous les jours</option>
+        <option value="Plusieurs fois par semaine">Plusieurs fois par semaine</option>
+        <option value="Chaque semaine">Chaque semaine</option>
+        <option value="Chaque mois">Chaque mois</option>
+      </select>
+      <select id="customCategory">
+        <option value="Productivité">Productivité</option>
+        <option value="Bien-être">Bien-être</option>
+        <option value="Santé">Santé</option>
+        <option value="Apprentissage">Apprentissage</option>
+        <option value="Vie sociale">Vie sociale</option>
+      </select>
+      <br>
+      <button type="button" class="btn" onclick="addGoal()">Ajouter l'objectif</button>
+    </form>
+
+    <table id="goalsTable" style="display:none;">
+      <thead>
+        <tr>
+          <th>Objectif</th>
+          <th>Récurrence</th>
+          <th>Catégorie</th>
+          <th>Supprimer</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <script>
+    function nextStep(currentStep) {
+      document.getElementById(`step${currentStep}`).classList.remove('active');
+      document.getElementById(`step${currentStep + 1}`).classList.add('active');
+    }
+
+    function showCustomForm() {
+      document.getElementById('habitForm').style.display = 'none';
+      document.getElementById('customGoalForm').style.display = 'block';
+      document.getElementById('goalsTable').style.display = 'table';
+      loadGoals();
+    }
+
+    function addGoal() {
+      const name = document.getElementById('customName').value;
+      const freq = document.getElementById('customFrequency').value;
+      const cat = document.getElementById('customCategory').value;
+
+      if (!name.trim()) return alert("Merci d'indiquer un nom d'objectif.");
+
+      const goal = { name, freq, cat };
+      const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+      goals.push(goal);
+      localStorage.setItem('goals', JSON.stringify(goals));
+
+      document.getElementById('customGoalForm').reset();
+      loadGoals();
+    }
+
+    function deleteGoal(index) {
+      const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+      goals.splice(index, 1);
+      localStorage.setItem('goals', JSON.stringify(goals));
+      loadGoals();
+    }
+
+    function loadGoals() {
+      const table = document.querySelector('#goalsTable tbody');
+      table.innerHTML = '';
+      const goals = JSON.parse(localStorage.getItem('goals') || '[]');
+      goals.forEach((goal, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${goal.name}</td><td>${goal.freq}</td><td>${goal.cat}</td><td><button class="delete-btn" onclick="deleteGoal(${i})">Supprimer</button></td>`;
+        table.appendChild(row);
+      });
+    }
+  </script>
+</body>
+</html>

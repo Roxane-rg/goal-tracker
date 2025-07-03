@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rapport et Suivi des Objectifs</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background-color: #fff;
+      color: #333;
+      margin: 0;
+      padding: 30px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2.5em;
+      text-align: center;
+      color: #e91e63;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      font-size: 1.8em;
+      margin-top: 40px;
+      color: #555;
+      border-bottom: 2px solid #e91e63;
+      display: inline-block;
+      padding-bottom: 5px;
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+    }
+
+    th, td {
+      background-color: #fff0f5;
+      padding: 15px;
+      text-align: center;
+      border-radius: 8px;
+    }
+
+    th {
+      background-color: #f3e5f5;
+      color: #e91e63;
+      font-weight: 600;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 40px;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #fce4ec;
+      padding: 20px;
+      border-radius: 15px;
+      flex: 1 1 250px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .card h3 {
+      color: #e91e63;
+      margin-bottom: 10px;
+    }
+
+    .filter-buttons {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .filter-buttons button {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      border-radius: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    #checkboxes {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background-color: #fce4ec;
+      padding: 10px 15px;
+      border-radius: 20px;
+    }
+
+    .checkbox-item input[type="checkbox"] {
+      accent-color: #e91e63;
+    }
+
+    canvas {
+      max-width: 100%;
+      margin-top: 30px;
+    }
+
+    #goToCreateBtn {
+      background-color: #e91e63;
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 25px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      box-shadow: 0 4px 12px rgba(233,30,99,0.4);
+      transition: background-color 0.3s ease;
+      display: block;
+      margin: 30px auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Rapport et Suivi des Objectifs</h1>
+
+    <button id="goToCreateBtn">Créer un objectif</button>
+
+    <div class="stats" id="stats"></div>
+
+    <h2>Liste des objectifs</h2>
+    <table id="reportTable">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Récurrence</th>
+          <th>Catégorie</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div class="filter-buttons">
+      <button onclick="setPeriod('day')">Jour</button>
+      <button onclick="setPeriod('week')">Semaine</button>
+      <button onclick="setPeriod('month')">Mois</button>
+    </div>
+
+    <div id="checkboxes"></div>
+
+    <canvas id="progressChart" height="100"></canvas>
+    <canvas id="categoryChart" height="100"></canvas>
+  </div>
+
+  <script>
+    document.getElementById('goToCreateBtn').addEventListener('click', function() {
+      window.location.href = 'create.html';
+    });
+
+    let period = 'week';
+    let selectedGoals = {};
+
+    function setPeriod(p) {
+      period = p;
+      renderCheckboxes();
+      updateChart();
+    }
+
+    function renderCheckboxes() {
+      const data = JSON.parse(localStorage.getItem('goals') || '[]');
+      const container = document.getElementById('checkboxes');
+      container.innerHTML = '';
+      data.forEach(goal => {
+        const id = `goal-${goal.name}`;
+        const checked = selectedGoals[goal.name] || false;
+        const div = document.createElement('div');
+        div.className = 'checkbox-item';
+        div.innerHTML = `
+          <input type="checkbox" id="${id}" ${checked ? 'checked' : ''} onchange="toggleGoal('${goal.name}')">
+          <label for="${id}">${goal.name}</label>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function toggleGoal(name) {
+      selectedGoals[name] = !selectedGoals[name];
+      updateChart();
+    }
+
+    function updateChart() {
+      const goalNames = Object.keys(selectedGoals).filter(name => selectedGoals[name]);
+      const values = goalNames.map(() => Math.floor(Math.random() * 10) + 1);
+
+      progressChart.data.labels = goalNames;
+      progressChart.data.datasets[0].data = values;
+      progressChart.update();
+    }
+
+    function loadReport() {
+      const data = JSON.parse(localStorage.getItem('goals') || '[]');
+      const table = document.querySelector('#reportTable tbody');
+      const statsContainer = document.getElementById('stats');
+      table.innerHTML = '';
+      statsContainer.innerHTML = '';
+
+      if (data.length === 0) {
+        table.innerHTML = '<tr><td colspan="3">Aucun objectif défini.</td></tr>';
+        return;
+      }
+
+      const countByFreq = {};
+      const countByCat = {};
+
+      data.forEach(goal => {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td>${goal.name}</td><td>${goal.freq}</td><td>${goal.cat}</td>`;
+        table.appendChild(row);
+
+        countByFreq[goal.freq] = (countByFreq[goal.freq] || 0) + 1;
+        countByCat[goal.cat] = (countByCat[goal.cat] || 0) + 1;
+      });
+
+      Object.entries(countByFreq).forEach(([freq, count]) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${freq}</h3><p>${count} objectif(s)</p>`;
+        statsContainer.appendChild(card);
+      });
+
+      Object.entries(countByCat).forEach(([cat, count]) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${cat}</h3><p>${count} objectif(s)</p>`;
+        statsContainer.appendChild(card);
+      });
+
+      renderCheckboxes();
+
+      const categoryLabels = Object.keys(countByCat);
+      const categoryCounts = Object.values(countByCat);
+
+      categoryChart.data.labels = categoryLabels;
+      categoryChart.data.datasets[0].data = categoryCounts;
+      categoryChart.update();
+    }
+
+    const progressChart = new Chart(document.getElementById('progressChart'), {
+      type: 'bar',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Progression',
+          data: [],
+          backgroundColor: '#e91e63'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const categoryChart = new Chart(document.getElementById('categoryChart'), {
+      type: 'pie',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'Catégories',
+          data: [],
+          backgroundColor: ['#f48fb1', '#ce93d8', '#ffccbc', '#80cbc4', '#ffe082']
+        }]
+      },
+      options: {
+        responsive: true
+      }
+    });
+
+    loadReport();
+  </script>
+</body>
+</html>
